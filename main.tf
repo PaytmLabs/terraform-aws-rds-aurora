@@ -22,6 +22,11 @@ resource "aws_db_subnet_group" "this" {
       "Name" = "aurora-${var.name}"
     },
   )
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "aws_rds_cluster" "this" {
@@ -54,7 +59,8 @@ resource "aws_rds_cluster" "this" {
   tags = var.tags
   lifecycle {
     ignore_changes = [
-      master_password
+      master_password,
+      tags
     ]
   }
 }
@@ -80,6 +86,11 @@ resource "aws_rds_cluster_instance" "this" {
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
 
   tags = var.tags
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "random_id" "snapshot_identifier" {
@@ -152,6 +163,12 @@ resource "aws_security_group" "this" {
   vpc_id      = var.vpc_id
 
   tags = var.tags
+  lifecycle {
+    ignore_changes = [
+      name_prefix,
+      tags
+    ]
+  }
 }
 
 resource "aws_security_group_rule" "default_ingress" {
