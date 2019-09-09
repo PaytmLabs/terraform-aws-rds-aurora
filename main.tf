@@ -52,6 +52,11 @@ resource "aws_rds_cluster" "this" {
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
   tags = var.tags
+  lifecycle {
+    ignore_changes = [
+      master_password
+    ]
+  }
 }
 
 resource "aws_rds_cluster_instance" "this" {
